@@ -426,8 +426,10 @@ class OpenIdConnectBackend(OIDCAuthenticationBackend): # pragma: no cover
             self.store_tokens(access_token, id_token)
             self.store_user_info(access_token)
             self.store_customer_info(access_token)
+            user_subdomain = get_subdomain(request)
+            self.request.session['subdomain'] = user_subdomain
             try:
-                return self.get_or_create_user(access_token, id_token, payload, get_subdomain(request))
+                return self.get_or_create_user(access_token, id_token, payload, user_subdomain)
             except SuspiciousOperation as exc:
                 LOGGER.warning("failed to get or create user: %s", exc)
                 return None
