@@ -251,8 +251,9 @@ class OCLogoutView(View):
 
     def post(self, request):
         """Log out the user."""
-        logout_url = self.redirect_url
-
+        # Overriding the default logout url '/' to prevent reinitiating login
+        # If the user is still not successfully logged out from other services (study designer), redirecting to the '/' causes form designer attempt relogin the user immediately after logout
+        logout_url = '/logout-success'
         if request.user.is_authenticated:
             # Check if a method exists to build the URL to log out the user
             # from the OP.
